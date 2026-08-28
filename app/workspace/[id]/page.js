@@ -87,73 +87,10 @@ export default function WorkspacePage() {
    */
 
   useEffect(() => {
-  if (!workspaceId) return;
+    if (!workspaceId) return;
 
-  let previousSnapshot = "";
-
-  const refreshWorkspace = async () => {
-    try {
-      const [
-        workspaceResponse,
-        tasksResponse,
-        messagesResponse,
-      ] = await Promise.all([
-        fetch("/api/workspaces", {
-          cache: "no-store",
-        }),
-        fetch(`/api/tasks?workspace=${workspaceId}`, {
-          cache: "no-store",
-        }),
-        fetch(`/api/messages?workspace=${workspaceId}`, {
-          cache: "no-store",
-        }),
-      ]);
-
-      if (!workspaceResponse.ok || !tasksResponse.ok || !messagesResponse.ok) {
-        return;
-      }
-
-      const workspaceData = await workspaceResponse.json();
-      const tasksData = await tasksResponse.json();
-      const messagesData = await messagesResponse.json();
-
-      const foundWorkspace = workspaceData.workspaces?.find(
-        (item) => item._id === workspaceId
-      );
-
-      if (!foundWorkspace) return;
-
-      const nextSnapshot = JSON.stringify({
-        workspace: foundWorkspace,
-        tasks: tasksData.tasks || [],
-        messages: messagesData.messages || [],
-      });
-
-      // Nothing changed — don't touch React state.
-      if (nextSnapshot === previousSnapshot) {
-        return;
-      }
-
-      previousSnapshot = nextSnapshot;
-
-      setWorkspace(foundWorkspace);
-      setTasks(tasksData.tasks || []);
-      setMessages(messagesData.messages || []);
-    } catch (error) {
-      console.error("WORKSPACE_REFRESH_ERROR:", error);
-    }
-  };
-
-  // Initial check
-  refreshWorkspace();
-
-  // Check for changes every 3 seconds
-  const interval = setInterval(refreshWorkspace, 3000);
-
-  return () => {
-    clearInterval(interval);
-  };
-}, [workspaceId]);
+    loadWorkspace();
+  }, [workspaceId]);
 
   /*
    * ---------------------------------------------------------
