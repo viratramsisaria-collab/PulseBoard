@@ -6,6 +6,7 @@ import { workspaceSchema } from "@/lib/validations";
 import { generateInviteToken } from "@/lib/invite";
 
 import Workspace from "@/models/Workspace";
+import User from "@/models/User";
 
 export async function GET(request) {
   try {

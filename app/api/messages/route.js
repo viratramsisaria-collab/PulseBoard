@@ -7,6 +7,7 @@ import { isValidObjectId } from "@/lib/utils";
 
 import Message from "@/models/Message";
 import Workspace from "@/models/Workspace";
+import User from "@/models/User";
 
 export async function GET(request) {
   try {

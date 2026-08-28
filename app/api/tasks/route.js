@@ -10,6 +10,7 @@ import { isValidObjectId } from "@/lib/utils";
 
 import Task from "@/models/Task";
 import Workspace from "@/models/Workspace";
+import User from "@/models/User";
 
 export async function GET(request) {
   try {
